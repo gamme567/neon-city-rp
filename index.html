@@ -248,5 +248,12 @@
         .catch((error) => window.__neonShowBootError('OYUN DOSYASI YÜKLENEMEDİ', error.message + ' Üç.js dosyasını veya internet bağlantısını kontrol et.'));
     }
   </script>
+<script>
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    alert('Three.js durumu: ' + typeof window.THREE);
+  }, 2000);
+});
+</script>
 </body>
 </html>
