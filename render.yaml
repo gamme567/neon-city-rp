@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: neon-city-rp-server
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    healthCheckPath: /api/ping
+    envVars:
+      - key: NEON_API_ONLY
+        value: "1"
+      - key: DATABASE_URL
+        sync: false
+      - key: NEON_ALLOWED_ORIGINS
+        sync: false

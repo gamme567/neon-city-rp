@@ -1,0 +1,2 @@
+# PostgreSQL persistence for hosted accounts/economy
+psycopg[binary]>=3.2,<4

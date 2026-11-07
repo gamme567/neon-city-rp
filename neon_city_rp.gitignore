@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+accounts.json
+.env
+*.log
+.DS_Store
