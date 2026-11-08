@@ -1,12 +1,11 @@
-// Three.js is served locally by server.py; the browser no longer depends on a CDN.
-const THREE = window.THREE;
-if (!THREE) {
-  const message = 'Yerel 3D motor dosyası yüklenemedi. Oyunu start.bat ile başlat ve server.py penceresindeki indirme uyarısını kontrol et.';
-  window.__neonShowBootError?.('3D MOTOR DOSYASI BULUNAMADI', message);
-  throw new Error(message);
-}
+// Three.js 3D motorunu ES Module olarak yükle
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js';
 
-const API = String(window.NEON_API_BASE || '').replace(/\/$/, '');
+// Render sunucusunun API adresi
+const API = String(
+    window.NEON_API_BASE || 'https://neon-city-rp-server.onrender.com'
+).replace(/\/$/, '');
+
 const $ = (id) => document.getElementById(id);
 const screens = ['device', 'auth', 'home', 'servers', 'character', 'settings', 'game'];
 const roleColors = { Vatandaş: '#54e2d6', Polis: '#6c9dff', Mekanik: '#ffb65a', Esnaf: '#d39aff' };
