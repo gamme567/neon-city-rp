@@ -256,20 +256,18 @@
         document.body.appendChild(script);
       });
 
-      // Config allows Netlify frontend + separately hosted Python API.
-      loadScript('/config.js')
-        .catch(() => {})
-        .then(() => loadThree('https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js')
-          .catch(() => loadThree('https://unpkg.com/three@0.159.0/build/three.module.js')))
-        .then(() => loadScript('/game.js', true))
-        .catch((error) => {
-          const message = error.message || String(error);
-          window.__neonShowBootError(
-            window.THREE ? 'OYUN DOSYASI YÜKLENEMEDİ' : '3D MOTORU YÜKLENEMEDİ',
-            message + ' İnternet bağlantısını ve game.js dosyasının yayın klasöründe olduğunu kontrol et.'
-          );
-        });
-    }
+ // Config dosyasını yükle ve ardından oyunu başlat
+loadScript('/config.js')
+    .catch(() => {})
+    .then(() => loadScript('/game.js', true))
+    .catch((error) => {
+        const message = error.message || String(error);
+
+        window.__neonShowBootError(
+            'OYUN BAŞLATILAMADI',
+            message + ' game.js veya Three.js yüklenemedi. İnternet bağlantısını kontrol et.'
+        );
+    });
   </script>
 </body>
 </html>
