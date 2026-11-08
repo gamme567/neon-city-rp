@@ -240,20 +240,36 @@
         document.body.appendChild(script);
       });
 
+      // Three.js'i ES modülü olarak yükle ve game.js'in beklediği global değişkene aktar.
+      const loadThree = (url) => new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.textContent = `
+          import * as THREE from '${url}';
+          window.THREE = THREE;
+        `;
+        script.onload = () => {
+          if (window.THREE) resolve();
+          else reject(new Error('Three.js yüklendi ancak window.THREE oluşturulamadı.'));
+        };
+        script.onerror = () => reject(new Error('Three.js modülü yüklenemedi: ' + url));
+        document.body.appendChild(script);
+      });
+
       // Config allows Netlify frontend + separately hosted Python API.
       loadScript('/config.js')
         .catch(() => {})
-        .then(() => loadScript('/three.min.js').catch(() => loadScript('https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js').catch(() => loadScript('https://unpkg.com/three@0.159.0/build/three.min.js'))))
+        .then(() => loadThree('https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.module.js')
+          .catch(() => loadThree('https://unpkg.com/three@0.159.0/build/three.module.js')))
         .then(() => loadScript('/game.js', true))
-        .catch((error) => window.__neonShowBootError('OYUN DOSYASI YÜKLENEMEDİ', error.message + ' Üç.js dosyasını veya internet bağlantısını kontrol et.'));
+        .catch((error) => {
+          const message = error.message || String(error);
+          window.__neonShowBootError(
+            window.THREE ? 'OYUN DOSYASI YÜKLENEMEDİ' : '3D MOTORU YÜKLENEMEDİ',
+            message + ' İnternet bağlantısını ve game.js dosyasının yayın klasöründe olduğunu kontrol et.'
+          );
+        });
     }
   </script>
-<script>
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    alert('Three.js durumu: ' + typeof window.THREE);
-  }, 2000);
-});
-</script>
 </body>
 </html>
